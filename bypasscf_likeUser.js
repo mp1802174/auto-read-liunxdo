@@ -30,7 +30,7 @@ if (fs.existsSync(".env.local")) {
 }
 
 // 读取以分钟为单位的运行时间限制
-const runTimeLimitMinutes = process.env.RUN_TIME_LIMIT_MINUTES || 20;
+const runTimeLimitMinutes = process.env.RUN_TIME_LIMIT_MINUTES || 18;
 
 // 将分钟转换为毫秒
 const runTimeLimitMillis = runTimeLimitMinutes * 60 * 1000;
@@ -125,8 +125,7 @@ function delayClick(time) {
         console.log("没有下一个批次，即将结束");
       }
       console.log(
-        `批次 ${
-          Math.floor(i / maxConcurrentAccounts) + 1
+        `批次 ${Math.floor(i / maxConcurrentAccounts) + 1
         } 完成，关闭浏览器...,浏览器对象：${browsers}`
       );
       // 关闭所有浏览器实例

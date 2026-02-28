@@ -33,11 +33,11 @@ const stealth = StealthPlugin();
 chromium.use(stealth);
 
 // 代理配置
-import { 
-  getProxyConfig, 
-  getPlaywrightProxyConfig, 
-  testProxyConnection, 
-  getCurrentIP 
+import {
+  getProxyConfig,
+  getPlaywrightProxyConfig,
+  testProxyConnection,
+  getCurrentIP
 } from "./src/proxy_config.js";
 // -----------------------------------------------------------------------
 // 环境变量加载
@@ -52,11 +52,11 @@ if (fs.existsSync(".env.local")) {
 }
 
 // 运行时间限制
-const runTimeLimitMinutes = Number(process.env.RUN_TIME_LIMIT_MINUTES || 20);
+const runTimeLimitMinutes = process.env.RUN_TIME_LIMIT_MINUTES || 18;
 const runTimeLimitMillis = runTimeLimitMinutes * 60 * 1000;
 console.log(`运行时间限制：${runTimeLimitMinutes} 分钟 (${runTimeLimitMillis} ms)`);
 setTimeout(() => {
-  console.log("Reached time limit, shutting down…");
+  console.log("达到运行时间限制，退出进程...");
   process.exit(0);
 }, runTimeLimitMillis);
 
@@ -92,7 +92,7 @@ const delay = (ms) => new Promise((r) => setTimeout(r, ms));
     const proxyConfig = getProxyConfig();
     if (proxyConfig) {
       console.log(`代理配置: ${proxyConfig.type}://${proxyConfig.host}:${proxyConfig.port}`);
-      
+
       // 测试代理连接
       console.log("正在测试代理连接...");
       const proxyWorking = await testProxyConnection(proxyConfig);
@@ -157,9 +157,9 @@ async function launchBrowserForUser(username, password, instanceDelay) {
   // 添加代理配置
   const proxyConfig = getProxyConfig();
   const playwrightProxy = getPlaywrightProxyConfig(proxyConfig);
-  
+
   const browser = await chromium.launch(launchOpts);
-  
+
   const contextOptions = {
     locale: "en-US",
     userAgent: `Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36`,
@@ -168,13 +168,13 @@ async function launchBrowserForUser(username, password, instanceDelay) {
       height: 720 + Math.floor(Math.random() * 100),
     },
   };
-  
+
   // 如果有代理配置，添加到context选项
   if (playwrightProxy) {
     contextOptions.proxy = playwrightProxy;
     console.log(`为用户 ${username} 启用代理: ${playwrightProxy.server}`);
   }
-  
+
   const context = await browser.newContext(contextOptions);
   await context.setExtraHTTPHeaders({ "accept-language": "en-US,en;q=0.9" });
 
@@ -194,8 +194,8 @@ async function launchBrowserForUser(username, password, instanceDelay) {
     loginUrl === "https://linux.do"
       ? "https://linux.do/t/topic/13716/700"
       : loginUrl === "https://meta.appinn.net"
-      ? "https://meta.appinn.net/t/topic/52006"
-      : `${loginUrl}/t/topic/1`;
+        ? "https://meta.appinn.net/t/topic/52006"
+        : `${loginUrl}/t/topic/1`;
   await page.goto(target, { waitUntil: "domcontentloaded" });
   await page.waitForTimeout(2000); // 跳转后等待2秒
 
